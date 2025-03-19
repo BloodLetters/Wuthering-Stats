@@ -1,8 +1,7 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
 const WutheringWavesGallery = () => {
-    const [searchTerm,
-        setSearchTerm] = useState('');
+    const [searchTerm, setSearchTerm] = useState('');
 
     const characters = [
         {
@@ -31,23 +30,19 @@ const WutheringWavesGallery = () => {
     const filteredCharacters = characters.filter(character => character.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
     return (
-        <div className="flex flex-col min-h-screen bg-gray-900">
+        <div className="flex flex-col min-h-screen bg-gray-900 font-inter">
             <header className="p-4 border-b border-gray-800">
-                <div className="container mx-auto flex justify-between items-center">
-                    <div className="text-white text-2xl">WutheringStats</div>
-                    <div className="flex space-x-2">
+                <div className="container mx-auto flex justify-center items-center px-4">
+                    <div className="text-white text-2xl">Wuthering Stats</div>
+                    <div className="flex space-x-2 ml-auto">
                         {/* <button className="bg-gray-800 hover:bg-gray-700 p-2 rounded transition-colors">
-              <span className="text-white">↓</span>
-            </button> */}
-                        <button className="bg-gray-800 hover:bg-gray-700 p-2 rounded transition-colors">
                             <span className="text-white">🔍</span>
-                        </button>
+                        </button> */}
                     </div>
                 </div>
             </header>
 
-            <div
-                className="container mx-auto p-4 flex items-center space-x-2 text-gray-400">
+            <div className="container mx-auto p-4 flex items-center space-x-2 text-gray-400">
                 <a href="#" className="hover:text-white transition-colors">🏠</a>
                 <span>›</span>
                 <a href="#" className="hover:text-white transition-colors">Wuthering Waves</a>
@@ -55,15 +50,15 @@ const WutheringWavesGallery = () => {
                 <span className="text-white">Portraits</span>
             </div>
 
-            <div
-                className="container mx-auto p-4 flex flex-col md:flex-row gap-4 items-center">
+            <div className="container mx-auto p-4 flex flex-col md:flex-row gap-4 items-center">
                 <div className="w-full md:w-2/3">
                     <input
                         type="text"
                         placeholder="Search assets..."
                         className="w-full p-2 bg-gray-800 text-white border border-gray-700 rounded focus:border-purple-500 focus:outline-none transition-colors"
                         value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}/>
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
                 </div>
                 <div className="flex items-center space-x-4 text-gray-300">
                     <button
@@ -84,8 +79,7 @@ const WutheringWavesGallery = () => {
             </div>
 
             <div className="container mx-auto p-4">
-                <div
-                    className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                     {filteredCharacters.map((character) => (
                         <div
                             key={character.id}
@@ -97,15 +91,16 @@ const WutheringWavesGallery = () => {
                                         alt={character.name}
                                         className={`w-full h-full object-cover ${character.obtained
                                         ? ''
-                                        : 'filter grayscale'} group-hover:grayscale-0 transition-all duration-300`}/> {/* Rarity color gradient that shows on hover */}
+                                        : 'filter grayscale'} group-hover:grayscale-0 transition-all duration-300`}
+                                    />
                                     <div
-                                        className={`absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t ${getRarityColor(character.rarity)} to-transparent opacity-0 group-hover:opacity-40 transition-opacity duration-300`}></div>
-                                </div>
-
-                                {/* Name positioned at the bottom with adjusted font */}
-                                <div
-                                    className="absolute bottom-0 left-0 right-0 py-2 px-2 text-gray-300 text-sm font-medium truncate group-hover:text-white transition-colors duration-300 bg-gradient-to-t from-black to-transparent">
-                                    {character.name}
+                                        className={`absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t ${getRarityColor(character.rarity)} to-transparent opacity-0 group-hover:opacity-40 transition-opacity duration-300`}
+                                    ></div>
+                                    <div
+                                        className="absolute bottom-0 left-0 right-0 py-2 px-2 text-gray-300 text-sm font-medium truncate group-hover:text-white transition-colors duration-300 bg-gradient-to-t from-gray-800 to-transparent"
+                                    >
+                                        {character.name}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -113,7 +108,6 @@ const WutheringWavesGallery = () => {
                 </div>
             </div>
 
-            {/* Footer */}
             <footer className="mt-auto p-4 bg-gray-800 text-gray-400 text-sm">
                 <div className="container mx-auto">
                     © 2025 Wuthering Stats
