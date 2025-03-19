@@ -9,7 +9,7 @@ const App = () => {
             <div className="flex flex-col min-h-screen bg-gray-900 font-inter">
                 <Routes>
                     <Route path="/" element={<Home />} />
-                    <Route path="/portraits" element={<Character />} />
+                    <Route path="/Characters" element={<Character />} />
                 </Routes>
             </div>
         </Router>
