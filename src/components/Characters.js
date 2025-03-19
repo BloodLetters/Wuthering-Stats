@@ -10,7 +10,8 @@ const WutheringWavesGallery = () => {
             image: 'https://wuthering.gg/_ipx/q_70&s_800x1104/images/IconRolePile/T_IconRole_Pile_ba' +
                 'ilian_UI.png',
             rarity: 4,
-            obtained: true
+            obtained: false,
+            sequences: 0
         }
     ];
 
@@ -35,9 +36,9 @@ const WutheringWavesGallery = () => {
                 <div className="container mx-auto flex justify-center items-center px-4">
                     <div className="text-white text-2xl">Wuthering Stats</div>
                     <div className="flex space-x-2 ml-auto">
-                        {/* <button className="bg-gray-800 hover:bg-gray-700 p-2 rounded transition-colors">
-                            <span className="text-white">🔍</span>
-                        </button> */}
+                        <button className="bg-gray-800 hover:bg-gray-700 p-2 rounded transition-colors">
+                            <span className="text-white">⚙️</span>
+                        </button>
                     </div>
                 </div>
             </header>
@@ -71,10 +72,6 @@ const WutheringWavesGallery = () => {
                         <span className="mr-2">↓</span>
                         Newest
                     </button>
-                    <button
-                        className="bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded flex items-center transition-colors">
-                        <span>⋮</span>
-                    </button>
                 </div>
             </div>
 
@@ -93,12 +90,15 @@ const WutheringWavesGallery = () => {
                                         ? ''
                                         : 'filter grayscale'} group-hover:grayscale-0 transition-all duration-300`}
                                     />
+                                    {character.obtained && (
+                                        <div className="absolute top-2 left-2 text-white p-1" style={{ backgroundColor: 'transparent' }}>
+                                            S{character.sequences}
+                                        </div>
+                                    )}
                                     <div
-                                        className={`absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t ${getRarityColor(character.rarity)} to-transparent opacity-0 group-hover:opacity-40 transition-opacity duration-300`}
-                                    ></div>
+                                        className={`absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t ${getRarityColor(character.rarity)} to-transparent opacity-0 group-hover:opacity-40 transition-opacity duration-300`}></div>
                                     <div
-                                        className="absolute bottom-0 left-0 right-0 py-2 px-2 text-gray-300 text-sm font-medium truncate group-hover:text-white transition-colors duration-300 bg-gradient-to-t from-gray-800 to-transparent"
-                                    >
+                                        className="absolute bottom-0 left-0 right-0 py-2 px-2 text-gray-300 text-sm font-medium truncate group-hover:text-white transition-colors duration-300 bg-gradient-to-t from-black to-transparent">
                                         {character.name}
                                     </div>
                                 </div>
