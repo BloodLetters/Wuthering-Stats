@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './components/Home';
 import Character from './components/Characters';
 import Profile from './components/Profile';
-import Settings from './components/Settings'
+import Settings from './components/Settings';
+import AccountImport from './components/Account';
 
 const App = () => {
     return (
@@ -14,6 +15,7 @@ const App = () => {
                     <Route path="/Characters" element={<Character />} />
                     <Route path="/Profile" element={<Profile />} />
                     <Route path="/Settings" element={<Settings />} />
+                    <Route path="/Import" element={<AccountImport />} />
                 </Routes>
             </div>
         </Router>
