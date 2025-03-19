@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FaUser, FaCog, FaQuestionCircle, FaTimes } from 'react-icons/fa';
+import { FaUser, FaCog, FaQuestionCircle, FaTimes, FaSignOutAlt } from 'react-icons/fa';
 
-const WutheringWavesGallery = () => {
+const Characters = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
+    const [allImagesLoaded, setAllImagesLoaded] = useState(false);
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
@@ -17,7 +18,7 @@ const WutheringWavesGallery = () => {
             image: 'https://wuthering.gg/_ipx/q_70&s_800x1104/images/IconRolePile/T_IconRole_Pile_ba' +
                 'ilian_UI.png',
             rarity: 4,
-            obtained: false,
+            obtained: true,
             sequences: 0
         }
     ];
@@ -37,11 +38,33 @@ const WutheringWavesGallery = () => {
 
     const filteredCharacters = characters.filter(character => character.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
-    // Dummy
+    // Dummy for authentication
     const isAuthenticated = true;
 
+    // Handle image loading
+    useEffect(() => {
+        const images = document.querySelectorAll('img');
+        let loadedCount = 0;
+
+        const handleImageLoad = () => {
+            loadedCount += 1;
+            if (loadedCount === images.length) {
+                setAllImagesLoaded(true);
+            }
+        };
+
+        images.forEach(image => {
+            if (image.complete) {
+                handleImageLoad();
+            } else {
+                image.addEventListener('load', handleImageLoad);
+                image.addEventListener('error', handleImageLoad);
+            }
+        });
+    }, []);
+
     return (
-        <div className="flex flex-col min-h-screen bg-gray-900 font-inter">
+        <div className={`flex flex-col min-h-screen bg-gray-900 font-inter ${allImagesLoaded ? 'opacity-100' : 'opacity-0'}`}>
             <header className="p-4 border-b border-gray-800">
                 <div className="container mx-auto flex justify-center items-center px-4">
                     <div className="text-white text-2xl">Wuthering Stats</div>
@@ -72,10 +95,8 @@ const WutheringWavesGallery = () => {
             </header>
 
             <div className="container mx-auto p-4 flex items-center space-x-2 text-gray-400">
-                <a href="#" className="hover:text-white transition-colors">🏠</a>
+                <a href="/" className="hover:text-white transition-colors">🏠</a>
                 <span>›</span>
-                {/* <a href="#" className="hover:text-white transition-colors">Wuthering Waves</a>
-                <span>›</span> */}
                 <span className="text-white">Characters</span>
             </div>
 
@@ -103,38 +124,63 @@ const WutheringWavesGallery = () => {
                 </div>
             </div>
 
-            <div className="container mx-auto p-4">
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                    {filteredCharacters.map((character) => (
-                        <div
-                            key={character.id}
-                            className="rounded overflow-hidden cursor-pointer group transform hover:scale-105 transition-all duration-300">
-                            <div className="relative h-full">
-                                <div className="aspect-[400/552] bg-gray-800 relative overflow-hidden">
-                                    <img
-                                        src={character.image}
-                                        alt={character.name}
-                                        className={`w-full h-full object-cover ${character.obtained
-                                        ? ''
-                                        : 'filter grayscale'} group-hover:grayscale-0 transition-all duration-300`}
-                                    />
-                                    {character.obtained && (
-                                        <div className="absolute top-2 left-2 text-white p-1" style={{ backgroundColor: 'transparent' }}>
-                                            S{character.sequences}
+            {isAuthenticated ? (
+                <div className="container mx-auto p-4">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                        {filteredCharacters.map((character) => (
+                            <div
+                                key={character.id}
+                                className="rounded overflow-hidden cursor-pointer group transform hover:scale-105 transition-all duration-300">
+                                <div className="relative h-full">
+                                    <div className="aspect-[400/552] bg-gray-800 relative overflow-hidden">
+                                        <img
+                                            src={character.image}
+                                            alt={character.name}
+                                            className={`w-full h-full object-cover ${character.obtained
+                                            ? ''
+                                            : 'filter grayscale'} group-hover:grayscale-0 transition-all duration-300`}
+                                        />
+                                        {character.obtained && (
+                                            <div className="absolute top-2 left-2 text-white p-1" style={{ backgroundColor: 'transparent' }}>
+                                                S{character.sequences}
+                                            </div>
+                                        )}
+                                        <div
+                                            className={`absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t ${getRarityColor(character.rarity)} to-transparent opacity-0 group-hover:opacity-40 transition-opacity duration-300`}>
                                         </div>
-                                    )}
-                                    <div
-                                        className={`absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t ${getRarityColor(character.rarity)} to-transparent opacity-0 group-hover:opacity-40 transition-opacity duration-300`}></div>
-                                    <div
-                                        className="absolute bottom-0 left-0 right-0 py-2 px-2 text-gray-300 text-sm font-medium truncate group-hover:text-white transition-colors duration-300 bg-gradient-to-t from-black to-transparent">
-                                        {character.name}
+                                        <div
+                                            className="absolute bottom-0 left-0 right-0 py-2 px-2 text-gray-300 text-sm font-medium truncate group-hover:text-white transition-colors duration-300 bg-gradient-to-t from-gray-900 to-transparent">
+                                            {character.name}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
-            </div>
+            ) : (
+                <div className="container mx-auto p-4 flex flex-col items-center">
+                    <div className="bg-gray-800 text-white p-6 rounded-lg shadow-md w-full md:w-2/3">
+                        <h2 className="text-xl font-bold mb-4">Penting</h2>
+                        <p className="mb-4">Anda perlu login untuk melihat karakter.</p>
+                        <div className="flex flex-wrap gap-2">
+                            <button
+                                className="bg-purple-600 hover:bg-purple-700 p-2 rounded transition-colors flex items-center"
+                            >
+                                <span className="text-white">🔐</span>
+                                <span className="ml-2 text-white">Login</span>
+                            </button>
+                            <button
+                                className="bg-gray-700 hover:bg-gray-600 p-2 rounded transition-colors flex items-center"
+                                onClick={toggleSidebar}
+                            >
+                                <span className="text-white">🔍</span>
+                                <span className="ml-2 text-white">Search</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             <footer className="mt-auto p-4 bg-gray-800 text-gray-400 text-sm">
                 <div className="container mx-auto">
@@ -169,6 +215,11 @@ const WutheringWavesGallery = () => {
                                 <FaQuestionCircle className="mr-2" /> Help
                             </Link>
                         </li>
+                        <li className="mt-6 pt-4 border-t border-gray-700">
+                            <button className="text-red-400 flex items-center w-full hover:text-red-300 transition-colors">
+                                <FaSignOutAlt className="mr-2" /> Logout
+                            </button>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -176,4 +227,4 @@ const WutheringWavesGallery = () => {
     );
 };
 
-export default WutheringWavesGallery;
+export default Characters;
