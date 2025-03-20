@@ -1,2 +1,3 @@
 # Getting Started with Create React App
-Still on progress btw
+This is front-end of ``Wuthering Stats``
+Please wait still in progress btw

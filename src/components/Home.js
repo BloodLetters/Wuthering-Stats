@@ -35,9 +35,10 @@ const Home = () => {
 
     // Featured content for homepage
     const featuredCharacters = [
-        { name: "Baizhi", rarity: 5, element: "Water", imageUrl: "/api/placeholder/120/160" },
-        { name: "Jianxin", rarity: 5, element: "Fire", imageUrl: "/api/placeholder/120/160" },
-        { name: "Lingyang", rarity: 4, element: "Wind", imageUrl: "/api/placeholder/120/160" }
+        { name: "Brant", rarity: 5, imageUrl: "..\\Assets\\Portrait\\T_IconRole_Pile_kelaita_UI.png" },
+        { name: "Phoebe", rarity: 5, imageUrl: "..\\Assets\\Portrait\\T_IconRole_Pile_kelaita_UI.png" },
+        { name: "Charlotta", rarity: 4, imageUrl: "..\\Assets\\Portrait\\T_IconRole_Pile_kelaita_UI.png" },
+        { name: "Baizhi", rarity: 5, imageUrl: "..\\Assets\\Portrait\\T_IconRole_Pile_kelaita_UI.png" }
     ];
 
     return (
@@ -98,7 +99,7 @@ const Home = () => {
                 </div>
 
                 {/* Featured Content */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                     {/* Quick Stats */}
                     <div className="bg-gray-800 rounded-lg overflow-hidden shadow-lg">
                         <div className="p-4 border-b border-gray-700">
@@ -127,26 +128,28 @@ const Home = () => {
                     </div>
 
                     {/* Featured Characters */}
-                    <div className="bg-gray-800 rounded-lg overflow-hidden shadow-lg md:col-span-2">
+                    <div className="bg-gray-800 rounded-lg overflow-hidden shadow-lg">
                         <div className="p-4 border-b border-gray-700">
-                            <h3 className="text-white text-lg font-semibold">Featured Characters</h3>
+                            <h3 className="text-white text-lg font-semibold">Latest Characters</h3>
                         </div>
                         <div className="p-4">
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                {featuredCharacters.map((character, index) => (
+                            <div className="grid grid-cols-3 gap-4">
+                                {featuredCharacters.slice(0, 3).map((character, index) => (
                                     <div key={index} className="bg-gray-700 rounded-lg overflow-hidden">
-                                        <img 
-                                            src={character.imageUrl} 
-                                            alt={character.name} 
-                                            className="w-full h-40 object-cover object-top"
-                                        />
-                                        <div className="p-3">
-                                            <div className="flex items-center justify-between">
-                                                <h4 className="text-white font-medium">{character.name}</h4>
+                                        <div className="relative">
+                                            <img 
+                                                src={character.imageUrl} 
+                                                alt={character.name} 
+                                                className="w-full aspect-square object-cover"
+                                            />
+                                            <div className="absolute bottom-2 right-2">
                                                 <div className={`w-8 h-8 ${character.rarity === 5 ? 'bg-yellow-500' : 'bg-purple-600'} rounded-full flex items-center justify-center text-white font-bold text-xs`}>
                                                     {character.rarity}★
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div className="p-2">
+                                            <h4 className="text-white font-medium">{character.name}</h4>
                                             <p className="text-gray-400 text-sm">{character.element}</p>
                                         </div>
                                     </div>
@@ -160,7 +163,7 @@ const Home = () => {
                         </div>
                     </div>
                 </div>
-
+            
                 {/* Game Updates */}
                 <div className="bg-gray-800 rounded-lg overflow-hidden shadow-lg">
                     <div className="p-4 border-b border-gray-700">

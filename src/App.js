@@ -5,6 +5,7 @@ import Character from './components/Characters';
 import Profile from './components/Profile';
 import Settings from './components/Settings';
 import AccountImport from './components/Account';
+import Search from './components/Search';
 
 const App = () => {
     return (
@@ -16,6 +17,7 @@ const App = () => {
                     <Route path="/Profile" element={<Profile />} />
                     <Route path="/Settings" element={<Settings />} />
                     <Route path="/Import" element={<AccountImport />} />
+                    <Route path="/Search" element={<Search />} />
                 </Routes>
             </div>
         </Router>

@@ -141,7 +141,7 @@ const Characters = () => {
                                             : 'filter grayscale'} group-hover:grayscale-0 transition-all duration-300`}
                                         />
                                         {character.obtained && (
-                                            <div className="absolute top-2 left-2 text-white p-1" style={{ backgroundColor: 'transparent' }}>
+                                            <div className="absolute top-2 left-2 bg-gray-900 bg-opacity-70 px-2 py-1 rounded text-white">
                                                 S{character.sequences}
                                             </div>
                                         )}
