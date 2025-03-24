@@ -25,8 +25,11 @@ const Settings = () => {
         }
     });
 
+    const isAuthenticated = false;
+
     // Toggle sidebar
     const toggleSidebar = () => {
+        if(!isAuthenticated) return;
         setIsSidebarOpen(!isSidebarOpen);
     };
 

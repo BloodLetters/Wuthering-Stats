@@ -8,7 +8,7 @@ const Search = () => {
     const [searchResults, setSearchResults] = useState([]);
     const [hasSearched, setHasSearched] = useState(false);
     const [allImagesLoaded, setAllImagesLoaded] = useState(false);
-    const isAuthenticated = true;
+    const isAuthenticated = false;
 
     // Mock user data - in a real app this would come from API
     const userAccounts = [
@@ -20,6 +20,7 @@ const Search = () => {
     ];
 
     const toggleSidebar = () => {
+        if(!isAuthenticated) return;
         setIsSidebarOpen(!isSidebarOpen);
     };
 

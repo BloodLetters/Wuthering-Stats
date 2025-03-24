@@ -8,6 +8,7 @@ const Home = () => {
     const isAuthenticated = false;
 
     const toggleSidebar = () => {
+        if(!isAuthenticated) return;
         setIsSidebarOpen(!isSidebarOpen);
     };
 

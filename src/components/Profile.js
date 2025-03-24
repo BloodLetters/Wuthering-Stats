@@ -5,8 +5,10 @@ import { FaUser, FaCog, FaQuestionCircle, FaTimes, FaEdit, FaSignOutAlt } from '
 const Profile = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [allImagesLoaded, setAllImagesLoaded] = useState(false);
+    const isAuthenticated = false;
 
     const toggleSidebar = () => {
+        if(!isAuthenticated) return;
         setIsSidebarOpen(!isSidebarOpen);
     };
 
@@ -27,9 +29,6 @@ const Profile = () => {
             { date: "Mar 10, 2025", action: "Reached Level 60" }
         ]
     };
-
-    // Dummy for authentication
-    const isAuthenticated = true;
 
     // Handle image loading
     useEffect(() => {

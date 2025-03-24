@@ -13,12 +13,14 @@ const Characters = () => {
     const queryParams = new URLSearchParams(window.location.search);
     const isViewing = queryParams.has("v");
     const navigate = useNavigate();
+    const isAuthenticated = false;
 
     const importPage = () => {
         navigate("/import");
     };
 
     const toggleSidebar = () => {
+        if(!isAuthenticated) return;
         setIsSidebarOpen(!isSidebarOpen);
     };
 
@@ -110,8 +112,6 @@ const Characters = () => {
         }
     };
 
-    const isAuthenticated = true;
-
     const LoadingSpinner = () => (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-80">
             <div className="flex flex-col items-center">
@@ -195,81 +195,57 @@ const Characters = () => {
             </div>
 
             {/* Main content area */}
-            {isAuthenticated ? (
-                <div className="container mx-auto p-4">
-                    {characters.length > 0 ? (
-                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                            {filteredCharacters.map((character) => (
-                                <div
-                                    key={character.id}
-                                    className="rounded-lg overflow-hidden cursor-pointer group transform hover:scale-105 transition-all duration-300 border border-gray-800">
-                                    <div className="relative h-full">
-                                        <div className="aspect-[400/552] bg-gray-900 relative overflow-hidden">
-                                            <img
-                                                src={character.image}
-                                                alt={character.name}
-                                                className={`w-full h-full object-cover ${character.obtained
-                                                    ? ''
-                                                    : 'filter grayscale'} group-hover:grayscale-0 transition-all duration-300`}
-                                            />
-                                            {character.obtained && (
-                                                <div className="absolute top-2 left-2 bg-black bg-opacity-70 px-2 py-1 rounded text-amber-100 border border-amber-900 text-sm">
-                                                    S{getSequence(character.sequences)}
-                                                </div>
-                                            )}
-                                            <div
-                                                className={`absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t ${getRarityColor(character.rarity)} opacity-0 group-hover:opacity-40 transition-opacity duration-300`}>
+            <div className="container mx-auto p-4">
+                {characters.length > 0 ? (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                        {filteredCharacters.map((character) => (
+                            <div
+                                key={character.id}
+                                className="rounded-lg overflow-hidden cursor-pointer group transform hover:scale-105 transition-all duration-300 border border-gray-800">
+                                <div className="relative h-full">
+                                    <div className="aspect-[400/552] bg-gray-900 relative overflow-hidden">
+                                        <img
+                                            src={character.image}
+                                            alt={character.name}
+                                            className={`w-full h-full object-cover ${character.obtained
+                                                ? ''
+                                                : 'filter grayscale'} group-hover:grayscale-0 transition-all duration-300`}
+                                        />
+                                        {character.obtained && (
+                                            <div className="absolute top-2 left-2 bg-black bg-opacity-70 px-2 py-1 rounded text-amber-100 border border-amber-900 text-sm">
+                                                S{getSequence(character.sequences)}
                                             </div>
-                                            <div
-                                                className="absolute bottom-0 left-0 right-0 py-2 px-3 text-gray-300 text-sm font-medium truncate group-hover:text-amber-100 transition-colors duration-300 bg-gradient-to-t from-black to-transparent">
-                                                {character.name}
-                                            </div>
+                                        )}
+                                        <div
+                                            className={`absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t ${getRarityColor(character.rarity)} opacity-0 group-hover:opacity-40 transition-opacity duration-300`}>
+                                        </div>
+                                        <div
+                                            className="absolute bottom-0 left-0 right-0 py-2 px-3 text-gray-300 text-sm font-medium truncate group-hover:text-amber-100 transition-colors duration-300 bg-gradient-to-t from-black to-transparent">
+                                            {character.name}
                                         </div>
                                     </div>
                                 </div>
-                            ))}
-                        </div>
-                    ) : (
-                        !isLoading && (
-                            <div className="flex flex-col items-center justify-center py-8">
-                                <div className="bg-gradient-to-br from-gray-900 to-black rounded-lg shadow-lg p-6 max-w-md w-full text-center border border-gray-800">
-                                    <div className="text-4xl mb-3">📝</div>
-                                    <h2 className="text-xl font-semibold text-amber-100 mb-3 font-serif">No Characters Found</h2>
-                                    <p className="text-gray-400 mb-6">You don't have any characters in your collection yet. Import them to get started.</p>
-                                    <button 
-                                        onClick={importPage}
-                                        className="bg-amber-800 hover:bg-amber-700 text-amber-100 py-2 px-6 rounded-md font-medium transition-colors duration-300 flex items-center justify-center mx-auto border border-amber-700">
-                                        <FaDownload className="mr-2" />
-                                        Import Characters
-                                    </button>
-                                </div>
                             </div>
-                        )
-                    )}
-                </div>
-            ) : (
-                !isLoading && characters.length === 0 && (
-                    <div className="container mx-auto p-4 flex flex-col items-center">
-                        <div className="bg-gradient-to-br from-gray-900 to-black text-white p-6 rounded-lg shadow-lg w-full md:w-2/3 border border-gray-800">
-                            <h2 className="text-xl font-bold mb-4 text-amber-100 font-serif">Login Required</h2>
-                            <p className="mb-4 text-gray-300">You need to log in to view and manage your character collection.</p>
-                            <div className="flex flex-wrap gap-2">
-                                <button className="bg-amber-800 hover:bg-amber-700 p-2 rounded-md transition-colors flex items-center border border-amber-700">
-                                    <span className="text-amber-100">🔐</span>
-                                    <span className="ml-2 text-amber-100">Login</span>
-                                </button>
-                                <button
-                                    className="bg-gray-800 hover:bg-gray-700 p-2 rounded-md transition-colors flex items-center border border-gray-700"
-                                    onClick={toggleSidebar}
-                                >
-                                    <span className="text-gray-300">🔍</span>
-                                    <span className="ml-2 text-gray-300">Browse Catalog</span>
-                                </button>
-                            </div>
-                        </div>
+                        ))}
                     </div>
-                )
-            )}
+                ) : (
+                    !isLoading && (
+                        <div className="flex flex-col items-center justify-center py-8">
+                            <div className="bg-gradient-to-br from-gray-900 to-black rounded-lg shadow-lg p-6 max-w-md w-full text-center border border-gray-800">
+                                <div className="text-4xl mb-3">📝</div>
+                                <h2 className="text-xl font-semibold text-amber-100 mb-3 font-serif">No Characters Found</h2>
+                                <p className="text-gray-400 mb-6">You don't have any characters in your collection yet. Import them to get started.</p>
+                                <button 
+                                    onClick={importPage}
+                                    className="bg-amber-800 hover:bg-amber-700 text-amber-100 py-2 px-6 rounded-md font-medium transition-colors duration-300 flex items-center justify-center mx-auto border border-amber-700">
+                                    <FaDownload className="mr-2" />
+                                    Import Characters
+                                </button>
+                            </div>
+                        </div>
+                    )
+                )}
+            </div>
 
             {/* Footer */}
             <footer className="mt-auto p-4 bg-black text-gray-500 text-sm border-t border-gray-800">
