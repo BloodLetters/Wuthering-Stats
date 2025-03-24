@@ -1,11 +1,16 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate, useParams } from 'react-router-dom';
 import Home from './components/Home';
 import Character from './components/Characters';
 import Profile from './components/Profile';
 import Settings from './components/Settings';
 import AccountImport from './components/Account';
 import Search from './components/Search';
+
+const UserRedirect = () => {
+    const { userId } = useParams();
+    return <Navigate to={`/Characters?v=${userId}`} replace />;
+};
 
 const App = () => {
     return (
@@ -18,6 +23,9 @@ const App = () => {
                     <Route path="/Settings" element={<Settings />} />
                     <Route path="/Import" element={<AccountImport />} />
                     <Route path="/Search" element={<Search />} />
+
+                    <Route path="/u/:userId" element={<UserRedirect />} />
+                    <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
             </div>
         </Router>
