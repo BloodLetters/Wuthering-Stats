@@ -71,14 +71,17 @@ const Search = () => {
     };
 
     return (
-        <div className={`flex flex-col min-h-screen bg-gray-900 font-inter transition-opacity duration-300`}>
-            <header className="p-4 border-b border-gray-800">
-                <div className="container mx-auto flex justify-center items-center px-4">
-                    <div className="text-white text-2xl">Wuthering Stats</div>
-                    <div className="flex space-x-2 ml-auto">
+        <div className="flex flex-col min-h-screen bg-black font-inter transition-opacity duration-300">
+            {/* Background overlay with subtle pattern */}
+            <div className="fixed inset-0 bg-[url('https://via.placeholder.com/100')] opacity-5 bg-repeat"></div>
+            
+            <header className="p-4 border-b border-gray-800 bg-gradient-to-b from-black via-black/80 to-transparent">
+                <div className="container mx-auto flex justify-between items-center px-4">
+                    <div className="text-white text-2xl font-serif tracking-wider">WUTHERING WAVES</div>
+                    <div className="flex space-x-2">
                         {isAuthenticated ? (
                             <button
-                                className="bg-gray-800 hover:bg-gray-700 p-2 rounded transition-colors flex items-center"
+                                className="bg-black hover:bg-gray-900 p-2 rounded border border-gray-700 transition-colors flex items-center"
                                 onClick={toggleSidebar}
                             >
                                 <span className="text-white">⚙️</span>
@@ -86,7 +89,7 @@ const Search = () => {
                             </button>
                         ) : (
                             <button
-                                className="bg-gray-800 hover:bg-gray-700 p-2 rounded transition-colors flex items-center"
+                                className="bg-black hover:bg-gray-900 p-2 rounded border border-gray-700 transition-colors flex items-center"
                                 onClick={toggleSidebar}
                             >
                                 <img
@@ -101,31 +104,41 @@ const Search = () => {
                 </div>
             </header>
 
-            <div className="container mx-auto p-4 flex items-center space-x-2 text-gray-400">
-                <Link to="/" className="hover:text-white transition-colors">🏠</Link>
+            <div className="relative z-10 container mx-auto p-4 flex items-center space-x-2 text-gray-400">
+                <Link to="/" className="hover:text-amber-300 transition-colors">🏠</Link>
                 <span>›</span>
-                <span className="text-white">User Search</span>
+                <span className="text-amber-200">User Search</span>
             </div>
 
-            <main className="flex-grow container mx-auto p-4">
+            <main className="relative z-10 flex-grow container mx-auto p-4">
+                {/* Title Section with styling similar to the Known Issue & Compensation image */}
+                {/* <div className="mb-8 text-center">
+                    <h1 className="text-4xl font-serif tracking-wide text-amber-100 mb-2">Find Resonators</h1>
+                    <div className="flex justify-center items-center">
+                        <div className="h-px w-16 bg-amber-700"></div>
+                        <p className="mx-4 text-amber-300 text-sm font-serif">Wuthering Waves</p>
+                        <div className="h-px w-16 bg-amber-700"></div>
+                    </div>
+                </div> */}
+                
                 {/* Search Hero Section */}
-                <div className="bg-gray-800 rounded-lg overflow-hidden shadow-lg mb-6">
-                    <div className="bg-gray-800 p-8 text-center">
-                        <h1 className="text-3xl font-bold text-white mb-4">Find Other Players</h1>
+                <div className="bg-gray-900 bg-opacity-80 rounded-lg overflow-hidden shadow-2xl mb-6 border border-gray-800">
+                    <div className="p-8 text-center">
+                        <h2 className="text-2xl font-serif text-amber-100 mb-4">Search Resonators</h2>
                         <p className="text-lg text-gray-300 mb-6">
-                            Search for other Wuthering Waves players by username
+                            Find other Wuthering Waves players by username
                         </p>
                         
                         <div className="max-w-2xl mx-auto">
                             <form onSubmit={handleSearch} className="flex items-center">
-                                <div className="relative w-full">
+                                <div className="relative w-full flex items-center">
                                     <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                        <FaSearch className="w-5 h-5 text-gray-400" />
+                                        <FaSearch className="w-5 h-5 text-amber-700" />
                                     </div>
                                     <input 
                                         type="text" 
-                                        className="bg-gray-700 border border-gray-600 text-white text-lg rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full pl-10 p-4" 
-                                        placeholder="Enter username..." 
+                                        className="bg-gray-800 border border-amber-900/40 text-amber-100 text-lg rounded-md focus:ring-amber-700 focus:border-amber-600 block w-full pl-10 p-4 h-[50px]" 
+                                        placeholder="Enter username or player id..." 
                                         value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)}
                                         onKeyPress={handleKeyPress}
@@ -134,7 +147,7 @@ const Search = () => {
                                 </div>
                                 <button 
                                     type="submit" 
-                                    className="p-4 ml-2 text-white bg-purple-600 hover:bg-purple-700 font-medium rounded-lg text-sm px-5 py-2.5 transition-colors"
+                                    className="ml-2 text-gray-300 bg-amber-800 hover:bg-amber-700 font-medium rounded-md text-sm px-5 py-2.5 h-[50px] flex items-center justify-center transition-all duration-300 border border-amber-600/30"
                                 >
                                     Search
                                 </button>
@@ -145,9 +158,9 @@ const Search = () => {
 
                 {/* Search Results Section */}
                 {hasSearched && (
-                    <div className="bg-gray-800 rounded-lg overflow-hidden shadow-lg">
+                    <div className="bg-gray-900 bg-opacity-80 rounded-lg overflow-hidden shadow-2xl border border-gray-800">
                         <div className="p-4 border-b border-gray-700 flex justify-between items-center">
-                            <h3 className="text-white text-lg font-semibold">
+                            <h3 className="text-amber-100 text-lg font-serif">
                                 {searchResults.length > 0 
                                     ? `Search Results (${searchResults.length})` 
                                     : "Search Results"}
@@ -163,10 +176,10 @@ const Search = () => {
                             {searchResults.length > 0 ? (
                                 <div className="space-y-3">
                                     {searchResults.map(user => (
-                                        <div key={user.id} className="bg-gray-700 rounded-lg overflow-hidden shadow transition-all hover:bg-gray-600 cursor-pointer">
+                                        <div key={user.id} className="bg-gray-800 bg-opacity-70 rounded-md overflow-hidden shadow transition-all hover:bg-gray-700 cursor-pointer border border-gray-700">
                                             <div className="flex items-center p-3">
                                                 <div className="flex-shrink-0">
-                                                    <div className="w-14 h-14 rounded-full bg-purple-800 flex items-center justify-center overflow-hidden">
+                                                    <div className="w-14 h-14 rounded-md bg-gray-900 flex items-center justify-center overflow-hidden border border-amber-900/40">
                                                         {user.avatar ? (
                                                             <img 
                                                                 src={user.avatar} 
@@ -174,17 +187,17 @@ const Search = () => {
                                                                 className="w-full h-full object-cover"
                                                             />
                                                         ) : (
-                                                            <FaUserAlt className="text-gray-300 text-2xl" />
+                                                            <FaUserAlt className="text-amber-200 text-2xl" />
                                                         )}
                                                     </div>
                                                 </div>
                                                 <div className="ml-4 flex-grow">
                                                     <div className="flex justify-between">
-                                                        <h4 className="text-white font-medium text-lg">{user.username}</h4>
+                                                        <h4 className="text-amber-100 font-medium text-lg">{user.username}</h4>
                                                         <span className="text-gray-400 text-sm">Last seen: {user.lastSeen}</span>
                                                     </div>
                                                     <div className="flex items-center mt-1">
-                                                        <div className="bg-purple-900 px-2 py-1 rounded text-xs text-white">
+                                                        <div className="bg-amber-900/50 px-2 py-1 rounded-sm text-xs text-amber-100 border border-amber-800/50">
                                                             Level {user.level}
                                                         </div>
                                                         <div className="ml-2 text-gray-400 text-sm">
@@ -192,7 +205,7 @@ const Search = () => {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <button className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1 rounded transition-colors ml-2">
+                                                <button className="bg-amber-800 hover:bg-amber-700 text-gray-300 px-3 py-1 rounded-md transition-all duration-300 ml-2 border border-amber-600/30">
                                                     View Profile
                                                 </button>
                                             </div>
@@ -202,9 +215,9 @@ const Search = () => {
                             ) : (
                                 <div className="py-8 text-center">
                                     <div className="flex justify-center mb-4">
-                                        <FaSearch className="w-16 h-16 text-gray-600" />
+                                        <FaSearch className="w-16 h-16 text-amber-900/50" />
                                     </div>
-                                    <h3 className="text-xl font-medium text-white mb-2">Account not found</h3>
+                                    <h3 className="text-xl font-serif text-amber-100 mb-2">Account not found</h3>
                                     <p className="text-gray-400">
                                         No accounts found matching "{searchTerm}".
                                     </p>
@@ -214,62 +227,87 @@ const Search = () => {
                                 </div>
                             )}
                         </div>
+                        
+                        {/* Next Slide button similar to the image */}
+                        {searchResults.length > 0 && (
+                            <div className="flex justify-end p-4 border-t border-gray-700">
+                                <button className="bg-amber-800 hover:bg-amber-700 text-gray-300 px-4 py-2 rounded-md transition-all duration-300 flex items-center space-x-2 border border-amber-600/30">
+                                    <span>Next Slide</span>
+                                    <span>›</span>
+                                </button>
+                            </div>
+                        )}
                     </div>
                 )}
 
                 {/* Search Tips Section - shown when no search has been performed */}
                 {!hasSearched && (
-                    <div className="bg-gray-800 rounded-lg overflow-hidden shadow-lg">
+                    <div className="bg-gray-900 bg-opacity-80 rounded-lg overflow-hidden shadow-2xl border border-gray-800">
                         <div className="p-4 border-b border-gray-700">
-                            <h3 className="text-white text-lg font-semibold">Search Tips</h3>
+                            <h3 className="text-amber-100 text-lg font-serif">Search Tips</h3>
                         </div>
                         <div className="p-6">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div className="bg-gray-700 p-4 rounded-lg">
-                                    <h4 className="text-purple-400 font-medium mb-2">Find Friends</h4>
+                                <div className="bg-gray-800 bg-opacity-70 p-4 rounded-md border border-gray-700">
+                                    <h4 className="text-amber-500 font-medium mb-2">Find Friends</h4>
                                     <p className="text-gray-300">
                                         Search for your friends by their exact username to find their profiles.
                                     </p>
                                 </div>
-                                <div className="bg-gray-700 p-4 rounded-lg">
-                                    <h4 className="text-purple-400 font-medium mb-2">Discover Top Players</h4>
+                                <div className="bg-gray-800 bg-opacity-70 p-4 rounded-md border border-gray-700">
+                                    <h4 className="text-amber-500 font-medium mb-2">Discover Top Resonators</h4>
                                     <p className="text-gray-300">
                                         Find the most active and high-level players in the community.
                                     </p>
                                 </div>
-                                <div className="bg-gray-700 p-4 rounded-lg">
-                                    <h4 className="text-purple-400 font-medium mb-2">Complete Username</h4>
+                                <div className="bg-gray-800 bg-opacity-70 p-4 rounded-md border border-gray-700">
+                                    <h4 className="text-amber-500 font-medium mb-2">Complete Username</h4>
                                     <p className="text-gray-300">
                                         For best results, enter the complete username rather than partial matches.
                                     </p>
                                 </div>
-                                <div className="bg-gray-700 p-4 rounded-lg">
-                                    <h4 className="text-purple-400 font-medium mb-2">Connect &amp; Collaborate</h4>
+                                <div className="bg-gray-800 bg-opacity-70 p-4 rounded-md border border-gray-700">
+                                    <h4 className="text-amber-500 font-medium mb-2">Connect &amp; Collaborate</h4>
                                     <p className="text-gray-300">
                                         Find players to team up with for challenging game content.
                                     </p>
                                 </div>
                             </div>
                         </div>
+                        
+                        {/* Next Slide button similar to the image */}
+                        <div className="flex justify-end p-4 border-t border-gray-700">
+                            <button className="bg-amber-800 hover:bg-amber-700 text-gray-300 px-4 py-2 rounded-md transition-all duration-300 flex items-center space-x-2 border border-amber-600/30">
+                                <span>Next Slide</span>
+                                <span>›</span>
+                            </button>
+                        </div>
                     </div>
                 )}
             </main>
 
-            <footer className="mt-auto p-4 bg-gray-800 text-gray-400 text-sm">
-                <div className="container mx-auto">© 2025 Wuthering Stats</div>
+            <footer className="mt-auto p-4 bg-black text-gray-500 text-sm border-t border-gray-800">
+                <div className="container mx-auto flex justify-between">
+                    <div>© 2025 Wuthering Stats</div>
+                    <div className="flex space-x-4">
+                        <a href="#" className="hover:text-amber-100">Terms</a>
+                        <a href="#" className="hover:text-amber-100">Privacy</a>
+                        <a href="#" className="hover:text-amber-100">Contact</a>
+                    </div>
+                </div>
             </footer>
 
             {/* Sidebar */}
             <div
-                className={`fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300 ${isSidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+                className={`fixed inset-0 bg-black bg-opacity-70 z-40 transition-opacity duration-300 backdrop-blur-sm ${isSidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
                 onClick={toggleSidebar}
             ></div>
             <div
-                className={`fixed top-0 right-0 bottom-0 w-64 bg-gray-800 z-50 transform transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : 'translate-x-full'} shadow-xl`}
+                className={`fixed top-0 right-0 bottom-0 w-64 bg-gray-900 z-50 transform transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : 'translate-x-full'} shadow-2xl border-l border-amber-900/30`}
             >
                 <div className="p-4">
                     <button
-                        className="text-white mb-6 flex items-center"
+                        className="text-amber-100 mb-6 flex items-center hover:text-amber-300 transition-colors"
                         onClick={toggleSidebar}
                     >
                         <FaTimes className="mr-2" />
@@ -277,22 +315,22 @@ const Search = () => {
                     </button>
                     <ul className="space-y-3">
                         <li>
-                            <Link to="/profile" className="text-white flex items-center p-2 rounded hover:bg-gray-700 transition-colors">
-                                <FaUser className="mr-3" /> My Profile
+                            <Link to="/profile" className="text-gray-300 flex items-center p-2 rounded-md hover:bg-gray-800 transition-colors border border-transparent hover:border-amber-900/30">
+                                <FaUser className="mr-3 text-amber-600" /> My Profile
                             </Link>
                         </li>
                         <li>
-                            <Link to="/settings" className="text-white flex items-center p-2 rounded hover:bg-gray-700 transition-colors">
-                                <FaCog className="mr-3" /> Settings
+                            <Link to="/settings" className="text-gray-300 flex items-center p-2 rounded-md hover:bg-gray-800 transition-colors border border-transparent hover:border-amber-900/30">
+                                <FaCog className="mr-3 text-amber-600" /> Settings
                             </Link>
                         </li>
                         <li>
-                            <Link to="/help" className="text-white flex items-center p-2 rounded hover:bg-gray-700 transition-colors">
-                                <FaQuestionCircle className="mr-3" /> Help Center
+                            <Link to="/help" className="text-gray-300 flex items-center p-2 rounded-md hover:bg-gray-800 transition-colors border border-transparent hover:border-amber-900/30">
+                                <FaQuestionCircle className="mr-3 text-amber-600" /> Help Center
                             </Link>
                         </li>
                         <li className="mt-6 pt-4 border-t border-gray-700">
-                            <button className="text-red-400 flex items-center w-full p-2 rounded hover:bg-gray-700 transition-colors">
+                            <button className="text-red-400 flex items-center w-full p-2 rounded-md hover:bg-gray-800 transition-colors border border-transparent hover:border-amber-900/30">
                                 <FaSignOutAlt className="mr-3" /> Logout
                             </button>
                         </li>

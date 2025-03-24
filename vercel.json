@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/v1/history",
+      "destination": "https://gmserver-api.aki-game2.net/gacha/record/query"
+    },
+    {
+      "source": "/api/v1/data/:path*",
+      "destination": "https://wutheringstats-api.vercel.app/api/data/:path*"
+    }
+  ]
+}

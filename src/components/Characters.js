@@ -1,55 +1,82 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { FaUser, FaCog, FaQuestionCircle, FaTimes, FaSignOutAlt } from 'react-icons/fa';
+import { Link, useNavigate } from 'react-router-dom';
+import { getPlayerData } from '../Storage/API';
+import { formatter, getAllResonance } from '../utils/Format';
+import { FaUser, FaCog, FaQuestionCircle, FaTimes, FaSignOutAlt, FaSearch, FaSortAmountDown, FaDownload, FaHome, FaChevronRight } from 'react-icons/fa';
 
 const Characters = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
-    const [allImagesLoaded, setAllImagesLoaded] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [characters, setCharacters] = useState([]);
+
+    const queryParams = new URLSearchParams(window.location.search);
+    const isViewing = queryParams.has("v");
+    const navigate = useNavigate();
+
+    const importPage = () => {
+        navigate("/import");
+    };
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
     };
 
-    const characters = [
-        {
-            id: 1,
-            name: 'Baizhi',
-            image: 'https://wuthering.gg/_ipx/q_70&s_800x1104/images/IconRolePile/T_IconRole_Pile_ba' +
-                'ilian_UI.png',
-            rarity: 4,
-            obtained: true,
-            sequences: 0
+    const filteredCharacters = characters.filter(character => character.name?.toLowerCase().includes(searchTerm.toLowerCase()));
+
+    const getSequence = (t) => {
+        if(t > 6) {
+            return 6;
+        } else {
+            return t;
         }
-    ];
+    }
 
-    const getRarityColor = (rarity) => { 
-        switch (rarity) {
-            case 5:
-                return 'from-yellow-500 to-transparent';
-            case 4:
-                return 'from-purple-900 to-transparent';
-            case 3:
-                return 'from-blue-900 to-transparent';
-            default:
-                return 'from-gray-400 to-gray-600';
-        }
-    };
+    useEffect(() => {
+        const fetchData = async () => {
+            setIsLoading(true); // Set isLoading to true when starting to fetch data
+            try {
 
-    const filteredCharacters = characters.filter(character => character.name.toLowerCase().includes(searchTerm.toLowerCase()));
+                if(isViewing && queryParams.get('v') === "all") {
+                    const resData = await getAllResonance();
+                    setCharacters(resData);
+                } else {
+                    let rawData;
+                    if (isViewing) {
+                        rawData = await getPlayerData(queryParams.get('v'));
+                    } else if (localStorage.getItem("Acc_id")) {
+                        rawData = await getPlayerData(localStorage.getItem("Acc_id"));
+                    }
 
-    // Dummy for authentication
-    const isAuthenticated = true;
+                    if (rawData !== false) {
+                        const resData = formatter(rawData.data.duplicates);
+                        setCharacters(resData);
+                        console.log(resData)
+                    }
+                }
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            } finally {
+                setIsLoading(false); // Set isLoading to false when data fetching is done
+            }
+        };
+
+        fetchData();
+    }, [isViewing, queryParams, characters]);
 
     // Handle image loading
     useEffect(() => {
+        if (characters.length === 0) {
+            return;
+        }
+
         const images = document.querySelectorAll('img');
         let loadedCount = 0;
 
         const handleImageLoad = () => {
             loadedCount += 1;
             if (loadedCount === images.length) {
-                setAllImagesLoaded(true);
+                setIsLoading(false); // Set isLoading to false when all images are loaded
             }
         };
 
@@ -61,17 +88,51 @@ const Characters = () => {
                 image.addEventListener('error', handleImageLoad);
             }
         });
-    }, []);
+
+        return () => {
+            images.forEach(image => {
+                image.removeEventListener('load', handleImageLoad);
+                image.removeEventListener('error', handleImageLoad);
+            });
+        };
+    }, [characters]);
+
+    const getRarityColor = (rarity) => { 
+        switch (rarity) {
+            case 5:
+                return 'from-amber-500 to-transparent';
+            case 4:
+                return 'from-purple-600 to-transparent';
+            case 3:
+                return 'from-blue-600 to-transparent';
+            default:
+                return 'from-gray-400 to-gray-600';
+        }
+    };
+
+    const isAuthenticated = true;
+
+    const LoadingSpinner = () => (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-80">
+            <div className="flex flex-col items-center">
+                <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-amber-500 mb-4"></div>
+                <p className="text-amber-100 text-lg font-serif">Loading characters...</p>
+            </div>
+        </div>
+    );
 
     return (
-        <div className={`flex flex-col min-h-screen bg-gray-900 font-inter ${allImagesLoaded ? 'opacity-100' : 'opacity-0'}`}>
-            <header className="p-4 border-b border-gray-800">
-                <div className="container mx-auto flex justify-center items-center px-4">
-                    <div className="text-white text-2xl">Wuthering Stats</div>
-                    <div className="flex space-x-2 ml-auto">
-                    {isAuthenticated ? (
+        <div className="flex flex-col min-h-screen bg-black font-inter">
+            {isLoading && <LoadingSpinner />}
+            
+            {/* Header with logo */}
+            <header className="p-4 border-b border-gray-800 bg-black">
+                <div className="container mx-auto flex justify-between items-center px-4">
+                    <div className="text-white text-2xl font-serif tracking-wider">WUTHERING WAVES</div>
+                    <div className="flex space-x-2">
+                        {isAuthenticated ? (
                             <button
-                                className="bg-gray-800 hover:bg-gray-700 p-2 rounded transition-colors flex items-center"
+                                className="bg-black hover:bg-gray-900 p-2 rounded border border-gray-700 transition-colors flex items-center"
                                 onClick={toggleSidebar}
                             >
                                 <span className="text-white">⚙️</span>
@@ -79,7 +140,7 @@ const Characters = () => {
                             </button>
                         ) : (
                             <button
-                                className="bg-gray-800 hover:bg-gray-700 p-2 rounded transition-colors flex items-center"
+                                className="bg-black hover:bg-gray-900 p-2 rounded border border-gray-700 transition-colors flex items-center"
                                 onClick={toggleSidebar}
                             >
                                 <img
@@ -94,129 +155,165 @@ const Characters = () => {
                 </div>
             </header>
 
+            {/* Breadcrumb navigation */}
             <div className="container mx-auto p-4 flex items-center space-x-2 text-gray-400">
-                <a href="/" className="hover:text-white transition-colors">🏠</a>
+                <Link to="/" className="hover:text-amber-100 transition-colors">
+                    <FaHome />
+                </Link>
                 <span>›</span>
-                <span className="text-white">Characters</span>
+                <span className="text-amber-100 font-serif">Characters</span>
             </div>
 
+            {/* Search and filter controls */}
             <div className="container mx-auto p-4 flex flex-col md:flex-row gap-4 items-center">
                 <div className="w-full md:w-2/3">
-                    <input
-                        type="text"
-                        placeholder="Search assets..."
-                        className="w-full p-2 bg-gray-800 text-white border border-gray-700 rounded focus:border-purple-500 focus:outline-none transition-colors"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
+                    <div className="relative">
+                        <input
+                            type="text"
+                            placeholder="Search characters..."
+                            className="w-full p-3 bg-gray-900 text-white border border-gray-700 rounded-md focus:border-amber-500 focus:outline-none transition-colors"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                        <FaSearch className="absolute right-3 top-3.5 text-gray-500" />
+                    </div>
                 </div>
                 <div className="flex items-center space-x-4 text-gray-300">
-                    <button
-                        className="bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded flex items-center transition-colors">
-                        <span className="mr-2">👁️</span>
-                        Mode: View
-                    </button>
-                    <button
-                        className="bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded flex items-center transition-colors">
-                        <span className="mr-2">↓</span>
+                    <button className="bg-gray-900 hover:bg-gray-800 px-4 py-2 rounded-md flex items-center transition-colors border border-gray-700">
+                        <FaSortAmountDown className="mr-2" />
                         Newest
                     </button>
+                    {!isViewing &&
+                        <button
+                            onClick={importPage}
+                            className="bg-amber-900 hover:bg-amber-800 px-4 py-2 rounded-md flex items-center transition-colors text-amber-100 border border-amber-700">
+                            <FaDownload className="mr-2" />
+                            Import
+                        </button>
+                    }
                 </div>
             </div>
 
+            {/* Main content area */}
             {isAuthenticated ? (
                 <div className="container mx-auto p-4">
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                        {filteredCharacters.map((character) => (
-                            <div
-                                key={character.id}
-                                className="rounded overflow-hidden cursor-pointer group transform hover:scale-105 transition-all duration-300">
-                                <div className="relative h-full">
-                                    <div className="aspect-[400/552] bg-gray-800 relative overflow-hidden">
-                                        <img
-                                            src={character.image}
-                                            alt={character.name}
-                                            className={`w-full h-full object-cover ${character.obtained
-                                            ? ''
-                                            : 'filter grayscale'} group-hover:grayscale-0 transition-all duration-300`}
-                                        />
-                                        {character.obtained && (
-                                            <div className="absolute top-2 left-2 bg-gray-900 bg-opacity-70 px-2 py-1 rounded text-white">
-                                                S{character.sequences}
+                    {characters.length > 0 ? (
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                            {filteredCharacters.map((character) => (
+                                <div
+                                    key={character.id}
+                                    className="rounded-lg overflow-hidden cursor-pointer group transform hover:scale-105 transition-all duration-300 border border-gray-800">
+                                    <div className="relative h-full">
+                                        <div className="aspect-[400/552] bg-gray-900 relative overflow-hidden">
+                                            <img
+                                                src={character.image}
+                                                alt={character.name}
+                                                className={`w-full h-full object-cover ${character.obtained
+                                                    ? ''
+                                                    : 'filter grayscale'} group-hover:grayscale-0 transition-all duration-300`}
+                                            />
+                                            {character.obtained && (
+                                                <div className="absolute top-2 left-2 bg-black bg-opacity-70 px-2 py-1 rounded text-amber-100 border border-amber-900 text-sm">
+                                                    S{getSequence(character.sequences)}
+                                                </div>
+                                            )}
+                                            <div
+                                                className={`absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t ${getRarityColor(character.rarity)} opacity-0 group-hover:opacity-40 transition-opacity duration-300`}>
                                             </div>
-                                        )}
-                                        <div
-                                            className={`absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t ${getRarityColor(character.rarity)} to-transparent opacity-0 group-hover:opacity-40 transition-opacity duration-300`}>
-                                        </div>
-                                        <div
-                                            className="absolute bottom-0 left-0 right-0 py-2 px-2 text-gray-300 text-sm font-medium truncate group-hover:text-white transition-colors duration-300 bg-gradient-to-t from-gray-900 to-transparent">
-                                            {character.name}
+                                            <div
+                                                className="absolute bottom-0 left-0 right-0 py-2 px-3 text-gray-300 text-sm font-medium truncate group-hover:text-amber-100 transition-colors duration-300 bg-gradient-to-t from-black to-transparent">
+                                                {character.name}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                            ))}
+                        </div>
+                    ) : (
+                        !isLoading && (
+                            <div className="flex flex-col items-center justify-center py-8">
+                                <div className="bg-gradient-to-br from-gray-900 to-black rounded-lg shadow-lg p-6 max-w-md w-full text-center border border-gray-800">
+                                    <div className="text-4xl mb-3">📝</div>
+                                    <h2 className="text-xl font-semibold text-amber-100 mb-3 font-serif">No Characters Found</h2>
+                                    <p className="text-gray-400 mb-6">You don't have any characters in your collection yet. Import them to get started.</p>
+                                    <button 
+                                        onClick={importPage}
+                                        className="bg-amber-800 hover:bg-amber-700 text-amber-100 py-2 px-6 rounded-md font-medium transition-colors duration-300 flex items-center justify-center mx-auto border border-amber-700">
+                                        <FaDownload className="mr-2" />
+                                        Import Characters
+                                    </button>
+                                </div>
                             </div>
-                        ))}
-                    </div>
+                        )
+                    )}
                 </div>
             ) : (
-                <div className="container mx-auto p-4 flex flex-col items-center">
-                    <div className="bg-gray-800 text-white p-6 rounded-lg shadow-md w-full md:w-2/3">
-                        <h2 className="text-xl font-bold mb-4">Penting</h2>
-                        <p className="mb-4">Anda perlu login untuk melihat karakter.</p>
-                        <div className="flex flex-wrap gap-2">
-                            <button
-                                className="bg-purple-600 hover:bg-purple-700 p-2 rounded transition-colors flex items-center"
-                            >
-                                <span className="text-white">🔐</span>
-                                <span className="ml-2 text-white">Login</span>
-                            </button>
-                            <button
-                                className="bg-gray-700 hover:bg-gray-600 p-2 rounded transition-colors flex items-center"
-                                onClick={toggleSidebar}
-                            >
-                                <span className="text-white">🔍</span>
-                                <span className="ml-2 text-white">Search</span>
-                            </button>
+                !isLoading && characters.length === 0 && (
+                    <div className="container mx-auto p-4 flex flex-col items-center">
+                        <div className="bg-gradient-to-br from-gray-900 to-black text-white p-6 rounded-lg shadow-lg w-full md:w-2/3 border border-gray-800">
+                            <h2 className="text-xl font-bold mb-4 text-amber-100 font-serif">Login Required</h2>
+                            <p className="mb-4 text-gray-300">You need to log in to view and manage your character collection.</p>
+                            <div className="flex flex-wrap gap-2">
+                                <button className="bg-amber-800 hover:bg-amber-700 p-2 rounded-md transition-colors flex items-center border border-amber-700">
+                                    <span className="text-amber-100">🔐</span>
+                                    <span className="ml-2 text-amber-100">Login</span>
+                                </button>
+                                <button
+                                    className="bg-gray-800 hover:bg-gray-700 p-2 rounded-md transition-colors flex items-center border border-gray-700"
+                                    onClick={toggleSidebar}
+                                >
+                                    <span className="text-gray-300">🔍</span>
+                                    <span className="ml-2 text-gray-300">Browse Catalog</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
+                )
             )}
 
-            <footer className="mt-auto p-4 bg-gray-800 text-gray-400 text-sm">
-                <div className="container mx-auto">
-                    © 2025 Wuthering Stats
+            {/* Footer */}
+            <footer className="mt-auto p-4 bg-black text-gray-500 text-sm border-t border-gray-800">
+                <div className="container mx-auto flex justify-between">
+                    <div>© 2025 Wuthering Stats</div>
+                    <div className="flex space-x-4">
+                        <a href="#" className="hover:text-amber-100">Terms</a>
+                        <a href="#" className="hover:text-amber-100">Privacy</a>
+                        <a href="#" className="hover:text-amber-100">Contact</a>
+                    </div>
                 </div>
             </footer>
 
+            {/* Sidebar */}
             <div
-                className={`fixed inset-0 flex justify-end transform transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : 'translate-x-full'}`}
+                className={`fixed inset-0 bg-black bg-opacity-70 flex justify-end transform transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : 'translate-x-full'}`}
+                style={{ zIndex: 1000 }}
             >
-                <div className="w-64 bg-gray-800 p-4">
+                <div className="w-64 bg-gray-900 p-4 border-l border-gray-800">
                     <button
-                        className="text-white mb-4 flex items-center"
+                        className="text-amber-100 mb-6 flex items-center"
                         onClick={toggleSidebar}
                     >
                         <FaTimes className="mr-2" />
                         Close
                     </button>
                     <ul>
-                        <li className="mb-2">
-                            <Link to="/profile" className="text-white flex items-center">
+                        <li className="mb-3">
+                            <Link to="/profile" className="text-gray-300 hover:text-amber-100 flex items-center p-2 transition-colors">
                                 <FaUser className="mr-2" /> Profile
                             </Link>
                         </li>
-                        <li className="mb-2">
-                            <Link to="/settings" className="text-white flex items-center">
+                        <li className="mb-3">
+                            <Link to="/settings" className="text-gray-300 hover:text-amber-100 flex items-center p-2 transition-colors">
                                 <FaCog className="mr-2" /> Settings
                             </Link>
                         </li>
-                        <li className="mb-2">
-                            <Link to="/help" className="text-white flex items-center">
+                        <li className="mb-3">
+                            <Link to="/help" className="text-gray-300 hover:text-amber-100 flex items-center p-2 transition-colors">
                                 <FaQuestionCircle className="mr-2" /> Help
                             </Link>
                         </li>
                         <li className="mt-6 pt-4 border-t border-gray-700">
-                            <button className="text-red-400 flex items-center w-full hover:text-red-300 transition-colors">
+                            <button className="text-red-400 flex items-center w-full hover:text-red-300 transition-colors p-2">
                                 <FaSignOutAlt className="mr-2" /> Logout
                             </button>
                         </li>
