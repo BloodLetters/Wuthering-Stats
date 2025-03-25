@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getPlayerData } from '../Storage/API';
 import { formatter, getAllResonance } from '../utils/Format';
-import { FaUser, FaCog, FaQuestionCircle, FaTimes, FaSignOutAlt, FaSearch, FaSortAmountDown, FaDownload, FaHome, FaChevronRight } from 'react-icons/fa';
+import { FaUser, FaCog, FaQuestionCircle, FaTimes, FaSignOutAlt, FaSearch, FaSortAmountDown, FaDownload, FaHome, FaSortAmountUp, FaShareAlt } from 'react-icons/fa';
 
 const Characters = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [isLoading, setIsLoading] = useState(true);
+    const [sortType, setSortType] = useState('newest');
     const [characters, setCharacters] = useState([]);
 
     const queryParams = new URLSearchParams(window.location.search);
@@ -19,12 +20,53 @@ const Characters = () => {
         navigate("/import");
     };
 
+    const sortedMethod = () => {
+        let newSortType;
+        switch (sortType) {
+            case 'newest':
+                newSortType = 'rarity';
+                break;
+            case 'rarity':
+                newSortType = 'sequence';
+                break;
+            case 'sequence':
+            default:
+                newSortType = 'newest';
+                break;
+        }
+        setSortType(newSortType);
+    };
+
     const toggleSidebar = () => {
         if(!isAuthenticated) return;
         setIsSidebarOpen(!isSidebarOpen);
     };
 
-    const filteredCharacters = characters.filter(character => character.name?.toLowerCase().includes(searchTerm.toLowerCase()));
+    const getSortedCharacters = () => {
+        let sortedChars = [...characters];
+
+        const filteredCharacters = sortedChars.filter(character => 
+            character.name?.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+
+        switch (sortType) {
+            case 'newest':
+                return filteredCharacters.sort((a, b) => 
+                    new Date(b.time || b.id) - new Date(a.time || a.id)
+                );
+            
+            case 'rarity':
+                return filteredCharacters.sort((a, b) => b.rarity - a.rarity);
+            
+            case 'sequence':
+                return filteredCharacters.sort((a, b) => b.sequences - a.sequences);
+            
+            default:
+                return filteredCharacters;
+        }
+    };
+
+    // const filteredCharacters = characters.filter(character => character.name?.toLowerCase().includes(searchTerm.toLowerCase()));
 
     const getSequence = (t) => {
         if(t > 6) {
@@ -36,7 +78,7 @@ const Characters = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            setIsLoading(true); // Set isLoading to true when starting to fetch data
+            setIsLoading(true);
             try {
 
                 if(isViewing && queryParams.get('v') === "all") {
@@ -53,20 +95,19 @@ const Characters = () => {
                     if (rawData !== false) {
                         const resData = formatter(rawData.data.duplicates);
                         setCharacters(resData);
-                        console.log(resData)
+                        // console.log(resData)
                     }
                 }
             } catch (error) {
                 console.error("Error fetching data:", error);
             } finally {
-                setIsLoading(false); // Set isLoading to false when data fetching is done
+                setIsLoading(false);
             }
         };
 
         fetchData();
-    }, [isViewing, queryParams, characters]);
+    }, []);
 
-    // Handle image loading
     useEffect(() => {
         if (characters.length === 0) {
             return;
@@ -78,7 +119,7 @@ const Characters = () => {
         const handleImageLoad = () => {
             loadedCount += 1;
             if (loadedCount === images.length) {
-                setIsLoading(false); // Set isLoading to false when all images are loaded
+                setIsLoading(false);
             }
         };
 
@@ -97,7 +138,7 @@ const Characters = () => {
                 image.removeEventListener('error', handleImageLoad);
             });
         };
-    }, [characters]);
+    }, []);
 
     const getRarityColor = (rarity) => { 
         switch (rarity) {
@@ -179,11 +220,23 @@ const Characters = () => {
                     </div>
                 </div>
                 <div className="flex items-center space-x-4 text-gray-300">
-                    <button className="bg-gray-900 hover:bg-gray-800 px-4 py-2 rounded-md flex items-center transition-colors border border-gray-700">
-                        <FaSortAmountDown className="mr-2" />
-                        Newest
+                    <button 
+                        onClick={sortedMethod}
+                        className="bg-gray-900 hover:bg-gray-800 px-4 py-2 rounded-md flex items-center transition-colors border border-gray-700"
+                    >
+                        {sortType === 'newest' ? <FaSortAmountDown className="mr-2" /> : <FaSortAmountUp className="mr-2" />}
+                        {sortType === 'newest' && 'Newest'}
+                        {sortType === 'rarity' && 'Rarity'}
+                        {sortType === 'sequence' && 'Sequence'}
                     </button>
                     {!isViewing &&
+                        <button 
+                            className="bg-gray-900 hover:bg-gray-800 px-4 py-2 rounded-md flex items-center transition-colors border border-gray-700">
+                            <FaShareAlt className='mr-2'/>
+                            Share
+                        </button>
+                    }
+                    {!isViewing && 
                         <button
                             onClick={importPage}
                             className="bg-amber-900 hover:bg-amber-800 px-4 py-2 rounded-md flex items-center transition-colors text-amber-100 border border-amber-700">
@@ -198,7 +251,7 @@ const Characters = () => {
             <div className="container mx-auto p-4">
                 {characters.length > 0 ? (
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                        {filteredCharacters.map((character) => (
+                        {getSortedCharacters().map((character) => (
                             <div
                                 key={character.id}
                                 className="rounded-lg overflow-hidden cursor-pointer group transform hover:scale-105 transition-all duration-300 border border-gray-800">
