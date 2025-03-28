@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FaUser, FaCog, FaQuestionCircle, FaTimes, FaSignOutAlt, FaSearch, FaUserAlt, FaChevronRight } from 'react-icons/fa';
+import { formatter } from '../utils/Format';
 
 const Home = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -36,10 +37,12 @@ const Home = () => {
 
     // Featured content for homepage
     const featuredCharacters = [
+        { name: "Cantarella", rarity: 5, imageUrl: "Assets\\Portrait\\Cantarella_Full_Sprite.webp"},
         { name: "Brant", rarity: 5, imageUrl: "Assets\\Portrait\\T_IconRole_Pile_Bulante_UI.png" },
         { name: "Phoebe", rarity: 5, imageUrl: "..\\Assets\\Portrait\\T_IconRole_Pile_Feibi_UI.png" },
-        { name: "Charlotta", rarity: 5, imageUrl: "..\\Assets\\Portrait\\T_IconRole_Pile_kelaita_UI.png" },
+        { name: "Charlotta", rarity: 5, imageUrl: "..\\Assets\\Portrait\\T_IconRole_Pile_kelaita_UI.png" }
     ];
+    
 
     return (
         <div className={`flex flex-col min-h-screen bg-black font-inter ${allImagesLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-500`}>
@@ -104,13 +107,9 @@ const Home = () => {
 
                 {/* Content Sections */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    {/* Known Issues & Compensation Section */}
                     <div className="bg-gradient-to-br from-gray-900 to-black rounded-lg overflow-hidden shadow-2xl border border-gray-800">
                         <div className="p-4 border-b border-gray-800 flex justify-between items-center">
                             <h3 className="text-amber-100 text-lg font-serif tracking-wide">Known Issues & Compensation</h3>
-                            {/* <button className="text-amber-100 bg-amber-900 hover:bg-amber-800 px-3 py-1 rounded-md flex items-center text-sm border border-amber-700">
-                                Next Slide <FaChevronRight className="ml-1" />
-                            </button> */}
                         </div>
                         <div className="p-4">
                             <div className="space-y-3">

@@ -9,7 +9,7 @@ function formatter(data, obtained = true) {
         'Verina': 5, 'Calcharo': 5, 'Carlotta': 5, 'Roccia': 5, 'Chixia': 4,
         'Danjin': 4, 'Aalto': 4, 'Sanhua': 4, 'Shorekeeper': 5, 'Taoqi': 4,
         'Xiangli Yao': 5, 'Yangyang': 4, 'Yinlin': 5, 'Youhu': 4, 'Yuanwu': 4,
-        'Zhezhi': 5
+        'Zhezhi': 5, 'Cantarella': 5
     };
 
     return data.map((item, index) => {
@@ -41,6 +41,7 @@ function formatter(data, obtained = true) {
             case 'Youhu': image = 'Assets\\Portrait\\T_IconRole_Pile_youhu_UI.png'; break;
             case 'Yuanwu': image = 'Assets\\Portrait\\T_IconRole_Pile_yuanwu_UI.png'; break;
             case 'Zhezhi': image = 'Assets\\Portrait\\T_IconRole_Pile_zhezhi_UI.png'; break;
+            case 'Cantarella': image = 'Assets\\Portrait\\Cantarella_Full_Sprite.webp'; break;
             default: image = ''; break;
         }
 
@@ -61,7 +62,7 @@ const getAllResonance = async () => {
     const characters = [
         'Encore', 'Mortefi', 'Baizhi', 'Brant', 'Camellya', 'Lumi', 'Phoebe', 'Jianxin', 'Jinhsi', 'Jiyan',
         'Verina', 'Calcharo', 'Carlotta', 'Roccia', 'Chixia', 'Danjin', 'Aalto', 'Sanhua', 'Shorekeeper', 'Taoqi',
-        'Xiangli Yao', 'Yangyang', 'Yinlin', 'Youhu', 'Yuanwu', 'Zhezhi'
+        'Xiangli Yao', 'Yangyang', 'Yinlin', 'Youhu', 'Yuanwu', 'Zhezhi', 'Cantarella'
     ];
 
     const rawData = characters.map((name, index) => ({
