@@ -77,8 +77,13 @@ const Search = () => {
             <div className="fixed inset-0 bg-[url('https://via.placeholder.com/100')] opacity-5 bg-repeat"></div>
             
             <header className="p-4 border-b border-gray-800 bg-gradient-to-b from-black via-black/80 to-transparent">
-                <div className="container mx-auto flex justify-between items-center px-4">
-                    <div className="text-white text-2xl font-serif tracking-wider">WUTHERING WAVES</div>
+                <div className="container mx-auto flex items-center justify-between px-4">
+                    <div className="text-lg sm:text-xl md:text-2xl lg:text-2xl xl:text-2xl
+                                    font-serif tracking-wider text-white 
+                                    transition-all duration-300 ease-in-out
+                                    hover:text-amber-100">
+                        WUTHERING WAVES
+                    </div>
                     <div className="flex space-x-2">
                         {isAuthenticated ? (
                             <button

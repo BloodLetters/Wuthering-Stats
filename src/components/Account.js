@@ -277,8 +277,13 @@ const Account = () => {
             <div className="fixed inset-0 bg-cover bg-center" style={{ backgroundImage: 'url(/images/background.jpg)', opacity: 0.2 }}></div>
             
             <header className="relative z-10 p-4 border-b border-gray-800">
-                <div className="container mx-auto flex justify-center items-center px-4">
-                    <div className="text-amber-100 text-2xl font-serif tracking-wider">Wuthering Stats</div>
+                <div className="container mx-auto flex items-center justify-between px-4">
+                    <div className="text-lg sm:text-xl md:text-2xl lg:text-2xl xl:text-2xl
+                                    font-serif tracking-wider text-white 
+                                    transition-all duration-300 ease-in-out
+                                    hover:text-amber-100">
+                        WUTHERING WAVES
+                    </div>
                     <div className="flex space-x-2 ml-auto">
                     {isAuthenticated ? (
                             <button

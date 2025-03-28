@@ -6,6 +6,8 @@ import Profile from './components/Profile';
 import Settings from './components/Settings';
 import AccountImport from './components/Account';
 import Search from './components/Search';
+import Login from './components/Login';
+import Register from './components/Register';
 
 const UserRedirect = () => {
     const { userId } = useParams();
@@ -23,6 +25,10 @@ const App = () => {
                     <Route path="/Settings" element={<Settings />} />
                     <Route path="/Import" element={<AccountImport />} />
                     <Route path="/Search" element={<Search />} />
+
+                    {/* Login Menus */}
+                    <Route path="/Login" element={<Login />} />
+                    <Route path="/Register" element={<Register />} />
 
                     <Route path="/u/:userId" element={<UserRedirect />} />
                     <Route path="*" element={<Navigate to="/" replace />} />

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FaUser, FaCog, FaQuestionCircle, FaTimes, FaSignOutAlt, FaSearch, FaUserAlt, FaChevronRight } from 'react-icons/fa';
-import { formatter } from '../utils/Format';
+import { FaUser, FaCog, FaQuestionCircle, FaTimes, FaSignOutAlt, FaSearch, FaUserAlt, FaChevronRight, FaUserAltSlash } from 'react-icons/fa';
+import Login from './Login';
 
 const Home = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -48,8 +48,14 @@ const Home = () => {
         <div className={`flex flex-col min-h-screen bg-black font-inter ${allImagesLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-500`}>
             {/* Header with logo */}
             <header className="p-4 border-b border-gray-800 bg-black">
-                <div className="container mx-auto flex justify-between items-center px-4">
-                    <div className="text-white text-2xl font-serif tracking-wider">WUTHERING WAVES</div>
+                <div className="container mx-auto flex items-center justify-between px-4">
+                    <div className="text-lg sm:text-xl md:text-2xl lg:text-2xl xl:text-2xl
+                                    font-serif tracking-wider text-white 
+                                    transition-all duration-300 ease-in-out
+                                    hover:text-amber-100">
+                        WUTHERING WAVES
+                    </div>
+                
                     <div className="flex space-x-2">
                         {isAuthenticated ? (
                             <button
@@ -60,17 +66,18 @@ const Home = () => {
                                 <span className="ml-2 text-white">Settings</span>
                             </button>
                         ) : (
-                            <button
+                            <Link
                                 className="bg-black hover:bg-gray-900 p-2 rounded border border-gray-700 transition-colors flex items-center"
-                                onClick={toggleSidebar}
+                                to="/Login"
                             >
-                                <img
+                                {/* <img
                                     src="https://www.gstatic.com/marketing-cms/assets/images/d5/dc/cfe9ce8b4425b410b49b7f2dd3f3/g.webp=s48-fcrop64=1,00000000ffffffff-rw"
                                     alt="Google Logo"
                                     className="w-5 h-5"
-                                />
+                                /> */}
+                                <FaUser className='text-white'/>
                                 <span className="ml-2 text-white">Login</span>
-                            </button>
+                            </Link>
                         )}
                     </div>
                 </div>
