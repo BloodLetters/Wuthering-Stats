@@ -6,7 +6,7 @@ const savePlayerData = async (playerId, data) => {
     try {
         const response = await axios.post(`/api/v1/data/${playerId}`, data, {
             headers: {
-                "x-api-key": ikey, // Ganti dengan API key Anda
+                "x-api-key": ikey
             },
         });
         // console.log("Data saved:", response.data);
@@ -22,7 +22,7 @@ const getPlayerData = async (playerId) => {
     try {
         const response = await axios.get(`/api/v1/data/${playerId}`, {
             headers: {
-                "x-api-key": ikey, // Ganti dengan API key Anda
+                "x-api-key": ikey
             },
         });
         
