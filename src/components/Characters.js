@@ -264,7 +264,7 @@ const Characters = () => {
                         {sortType === 'rarity' && 'Rarity'}
                         {sortType === 'sequence' && 'Sequence'}
                     </button>
-                    {!isViewing &&
+                    {!isViewing && localStorage.getItem("Acc_id") &&
                         <button 
                             onClick={toggleShareCard}
                             className="bg-gray-900 hover:bg-gray-800 px-4 py-2 rounded-md flex items-center transition-colors border border-gray-700">
